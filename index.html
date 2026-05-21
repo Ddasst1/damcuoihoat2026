@@ -46,11 +46,7 @@
         .swiper-slide img { width: 100%; height: 480px; object-fit: cover; border-radius: 8px; border: 5px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .swiper-button-next, .swiper-button-prev { color: #9c5a1a !important; }
         .swiper-pagination-bullet-active { background: #9c5a1a !important; }
-        
-        .map-buttons-container { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-        .direction-btn { display: block; width: 100%; padding: 14px; color: #fff; text-decoration: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s, background 0.3s; }
-        .direction-btn:hover { transform: scale(1.02); }
-        
+        .map-holder { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; margin-top: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #e2d7cf; }
         .chat-container { width: 100%; height: 220px; background-color: rgba(59, 50, 50, 0.04); border-radius: 12px; padding: 15px; margin-bottom: 25px; overflow: hidden; position: relative; border: 1px solid #e2d7cf; }
         .chat-messages { display: flex; flex-direction: column; justify-content: flex-end; height: 100%; gap: 10px; }
         .chat-item { display: block; text-align: left; background-color: rgba(255, 255, 255, 0.9); padding: 8px 14px; border-radius: 15px; font-size: 0.85rem; max-width: 90%; box-shadow: 0 2px 5px rgba(0,0,0,0.03); animation: slideInChat 0.3s ease-out forwards; word-break: break-word; }
@@ -88,8 +84,8 @@
         </div>
         
         <div class="hero-section">
-            <h2 data-aos="fade-up">Văn Hoạt<br><span style="font-size: 2rem; opacity: 0.8;">&</span><br>Ngọc Hằng</h2>
-            <p style="letter-spacing: 3px; text-transform: uppercase; margin-top: 10px; font-weight: 300;" data-aos="fade-up" data-aos-delay="200">Save Our Date — 14.06.2026</p>
+            <h2>Văn Hoạt<br><span style="font-size: 2rem; opacity: 0.8;">&</span><br>Ngọc Hằng</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Save Our Date — 14.06.2026</p>
         </div>
         
         <div class="content-padding">
@@ -165,9 +161,8 @@
         
         <div class="content-padding">
             <h3 class="title-serif" data-aos="fade-up">WEDDING LOCATION</h3>
-            <p style="font-size: 0.85rem; color: #666; font-style: italic; margin-bottom: 20px;">Bấm vào nút dưới đây để nhận chỉ đường qua Google Maps</p>
-            <div class="map-buttons-container" data-aos="fade-up" data-aos-delay="200">
-                <a href="https://maps.google.com/?q=11°31'28.8&quot;N,106°27'27.6&quot;E" target="_blank" class="direction-btn" style="background-color: #3b3232;">CHỈ ĐƯỜNG TỚI NHÀ TRAI (TÂN HÔN) ♥</a>
+            <div class="map-holder" data-aos="fade-up" data-aos-delay="200">
+                <iframe src="https://maps.google.com/maps?q=11°31'28.8%22N+106°27'27.6%22E&z=16&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
         
@@ -201,7 +196,6 @@
         </div>
     </div>
     <script>
-        // Code điều khiển chính giữ nguyên chuẩn ES5 chống lỗi
         function openWeddingCard() {
             var gate = document.getElementById('gateScreen');
             if (gate) { gate.classList.add('fade-out'); }
@@ -234,7 +228,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         document.addEventListener('click', function(e) {
-            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT' || e.target.closest('.audio-wrapper') || e.target.closest('.direction-btn')) return;
+            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT' || e.target.closest('.audio-wrapper')) return;
             const heart = document.createElement('div');
             heart.className = 'click-heart';
             heart.innerHTML = '♥';
@@ -317,14 +311,9 @@
                 e.preventDefault(); 
                 submitBtn.disabled = true;
                 submitBtn.innerText = "ĐANG GỬI XÁC NHẬN... ⏳";
-                
                 const formData = new FormData(rsvpForm);
-                
-                // MẸO HACK DATA: Đính thêm nhãn phân loại Khách Nhà Trai trực tiếp vào lời chúc
                 const wishText = document.getElementById('inputWish').value;
-                const hackedWish = wishText + " [Khách Nhà Trai]";
-                formData.set('wish', hackedWish);
-                
+                formData.set('wish', wishText + " [Khách Nhà Traи]");
                 const searchParams = new URLSearchParams(formData);
                 
                 fetch(GOOGLE_SCRIPT_URL, {
